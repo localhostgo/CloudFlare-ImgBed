@@ -298,8 +298,13 @@ async function uploadFileToCloudflareR2(env, formdata, fullId, metadata, returnL
     }
 
     const r2Channel = r2Settings.channels[0];
-    
-    const R2DataBase = env.img_r2;
+
+    // 获取当前日期并创建目录路径
+    const now = new Date();
+    const yearMonth = now.toISOString().slice(0, 7).replace(/-/g, ''); // yyyyMM
+    const day = String(now.getDate()).padStart(2, '0'); // dd
+    const storagePath = `imgbed/${yearMonth}/${day}`;
+    const R2DataBase = env.img_r2 + storagePath;
 
     // 写入R2数据库
     await R2DataBase.put(fullId, formdata.get('file'));
